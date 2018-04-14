@@ -1,5 +1,7 @@
 package acgfreshman.eventreporter;
 
+import android.content.res.Configuration;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,25 +9,43 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 @SuppressWarnings("ALL")
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements EventFragment.OnItemSelectListener
+{
+    private EventFragment mListFragment;
+    private CommentFragment mGridFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Get ListView object from xml.
-        ListView eventListView = (ListView) findViewById(R.id.event_list);
 
-        // Initialize an adapter.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this,
-                R.layout.event_item,
-                R.id.event_name,
-                getEventNames());
+//        // Show different fragments based on screen size.
+//        if (findViewById(R.id.fragment_container) != null) {
+//            Fragment fragment = isTablet() ? new CommentFragment() : new EventFragment();
+//            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+//        }
+        //add list view
+        mListFragment = new EventFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.event_container,     mListFragment).commit();
 
-        // Assign adapter to ListView.
-        eventListView.setAdapter(adapter);
+
+        //add Gridview
+        if (isTablet()) {
+            mGridFragment = new CommentFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.comment_container, mGridFragment).commit();
+        }
+
+
     }
+
+    private boolean isTablet() {
+        return (getApplicationContext().getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+//xml boolean value depends on screen size
+
 
     /**
      * A dummy function to get fake event names.
@@ -40,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
                 "Event10", "Event11", "Event12"};
         return names;
     }
+
+    @Override
+    public void onItemSelected(int position){
+        mGridFragment.onItemSelected(position);
+    }
+
 
     @Override
     protected void onStart() {
