@@ -8,8 +8,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 @SuppressWarnings("ALL")
-public class MainActivity extends AppCompatActivity  implements EventFragment.OnItemSelectListener
+public class MainActivity extends AppCompatActivity implements EventFragment.OnItemSelectListener
 {
     private EventFragment mListFragment;
     private CommentFragment mGridFragment;
@@ -20,21 +23,21 @@ public class MainActivity extends AppCompatActivity  implements EventFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // Show different fragments based on screen size.
-//        if (findViewById(R.id.fragment_container) != null) {
-//            Fragment fragment = isTablet() ? new CommentFragment() : new EventFragment();
-//            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+
+//        mListFragment = new EventFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.event_container, mListFragment).commit();
+//
+//
+//        //add Gridview
+//        if (isTablet()) {
+//            mGridFragment = new CommentFragment();
+//            getSupportFragmentManager().beginTransaction().add(R.id.comment_container, mGridFragment).commit();
 //        }
-        //add list view
-        mListFragment = new EventFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.event_container,     mListFragment).commit();
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
 
-
-        //add Gridview
-        if (isTablet()) {
-            mGridFragment = new CommentFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.comment_container, mGridFragment).commit();
-        }
+        myRef.setValue("Hello, World!");
 
 
     }

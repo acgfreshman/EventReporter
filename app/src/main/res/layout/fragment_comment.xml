@@ -14,8 +14,8 @@
         android:id="@+id/comment_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
+        android:gravity="center"
         android:horizontalSpacing="10dp"
-        android:gravity="center" />
+        android:numColumns="2"
+        android:verticalSpacing="10dp" />
 </FrameLayout>
